@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Jobs</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js"></script>
+
+<script>
+function loadJobs(){
+  let jobs = JSON.parse(localStorage.getItem('jobs')) || [];
+  let user = JSON.parse(localStorage.getItem('user'));
+
+  let html = '';
+
+  jobs.forEach(job => {
+    let match = 0;
+    if(user.skills.length){
+      let common = job.skills.filter(s => user.skills.includes(s));
+      match = Math.floor(common.length / job.skills.length * 100);
+    }
+
+    html += `
+    <div class="card fade-in">
+      <h3>${job.title}</h3>
+      <p>Match: ${match}%</p>
+      <button onclick="applyJob('${job.title}')">Apply</button>
+      <button onclick="favoriteJob('${job.title}')">❤️</button>
+    </div>
+    `;
+  });
+
+  document.getElementById('jobs').innerHTML = html;
+}
+</script>
+
+</head>
+<body onload="loadJobs()">
+
+<h2>Jobs</h2>
+<div id="jobs"></div>
+
+</body>
+</html>
